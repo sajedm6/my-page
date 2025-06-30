@@ -1,21 +1,95 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>My ID Page</title>
+  <title>Certification Page</title>
   <style>
     body {
       background-color: black;
+      color: white;
       text-align: center;
+      font-family: sans-serif;
       margin-top: 50px;
+      animation: pageEnter 0.8s ease-out;
     }
+
     img {
+      margin: 20px;
       border-radius: 10px;
+      max-width: 90%;
+      height: auto;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeIn 1s ease-out forwards;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    }
+
+    img:nth-of-type(2) {
+      animation-delay: 0.3s;
+    }
+
+    .note {
+      font-size: 18px;
+      margin-top: 30px;
+      opacity: 0;
+      animation: fadeInText 1s ease-in-out 0.6s forwards;
+    }
+
+    .download-button {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: white;
+      color: black;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .download-button:hover {
+      background-color: #ddd;
+      transform: scale(1.05);
+    }
+
+    @keyframes pageEnter {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInText {
+      to {
+        opacity: 1;
+      }
     }
   </style>
 </head>
 <body>
-  <img src="https://i.postimg.cc/SRNMRDTk/ring-copy.png" alt="Profile">
+  <img src="https://i.postimg.cc/Nf6T0M6Y/certificate-back-copy.png" alt="Certificate Back">
+  <img src="https://i.postimg.cc/bwqnShgn/certificate-front-copy.png" alt="Certificate Front">
+
+  <div>
+    <a href="https://i.postimg.cc/bwqnShgn/certificate-front-copy.png" download class="download-button">
+      Download Front Certificate
+    </a>
+  </div>
+
+  <div class="note">
+    this certification is issued for Mohamad Sajed Hamouda - تم إصدار هذه الشهادة لمحمد ساجد حمودة
+  </div>
 </body>
 </html>
-<p>Name: mohamad sajed hamouda</p>
-<p>Issued: march 2025</p>
