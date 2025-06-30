@@ -6,24 +6,32 @@
     body {
       background-color: black;
       color: white;
-      text-align: center;
       font-family: sans-serif;
-      margin-top: 50px;
+      margin: 0;
+      padding: 40px 20px;
+      text-align: center;
       animation: pageEnter 0.8s ease-out;
     }
 
-    img {
-      margin: 20px;
+    .images-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .images-container img {
       border-radius: 10px;
-      max-width: 90%;
+      max-width: 45%;
+      min-width: 280px;
       height: auto;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
       opacity: 0;
       transform: translateY(20px);
       animation: fadeIn 1s ease-out forwards;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
     }
 
-    img:nth-of-type(2) {
+    .images-container img:nth-of-type(2) {
       animation-delay: 0.3s;
     }
 
@@ -36,7 +44,7 @@
 
     .download-button {
       display: inline-block;
-      margin-top: 15px;
+      margin-top: 20px;
       padding: 10px 20px;
       background-color: white;
       color: black;
@@ -79,8 +87,11 @@
   </style>
 </head>
 <body>
-  <img src="https://i.postimg.cc/Nf6T0M6Y/certificate-back-copy.png" alt="Certificate Back">
-  <img src="https://i.postimg.cc/bwqnShgn/certificate-front-copy.png" alt="Certificate Front">
+
+  <div class="images-container">
+    <img src="https://i.postimg.cc/Nf6T0M6Y/certificate-back-copy.png" alt="Certificate Back">
+    <img src="https://i.postimg.cc/bwqnShgn/certificate-front-copy.png" alt="Certificate Front">
+  </div>
 
   <div>
     <a href="https://i.postimg.cc/bwqnShgn/certificate-front-copy.png" download class="download-button">
@@ -89,7 +100,8 @@
   </div>
 
   <div class="note">
-    this certification is issued for Mohamad Sajed Hamouda - تم إصدار هذه الشهادة لمحمد ساجد حمودة
+    This certificate is issued to Mr. Mohamad Sajed Hamouda — تم إصدار هذه الشهادة للسيد محمد ساجد حمودة
   </div>
+
 </body>
 </html>
