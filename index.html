@@ -25,15 +25,21 @@
       padding: 40px 20px;
     }
 
+    body {
+      flex: 1 0 auto;
+    }
+
     .glass-container {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.1); /* slightly more opaque to help PDF */
       border-radius: 16px;
-      backdrop-filter: blur(10px);
+      /* Removed backdrop-filter for better PDF */
       padding: 30px;
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
       max-width: 1000px;
       margin: auto;
       flex: 1 0 auto;
+      color: black; /* Use black text to show well on white PDF bg */
+      background-color: white; /* solid white background for PDF */
     }
 
     .images-container {
@@ -49,15 +55,11 @@
       max-width: 45%;
       min-width: 280px;
       height: auto;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-    }
-
-    .images-container img.visible {
-      opacity: 1;
-      transform: translateY(0);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      opacity: 1 !important; /* force visible for PDF */
+      transform: none !important; /* cancel animation transform */
+      transition: none !important;
+      filter: none !important;
     }
 
     .download-button,
@@ -65,28 +67,27 @@
       display: inline-block;
       margin: 15px 10px 0;
       padding: 10px 20px;
-      background-color: white;
-      color: black;
+      background-color: #333;
+      color: white;
       border: none;
       border-radius: 8px;
       text-decoration: none;
       font-weight: bold;
       cursor: pointer;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      box-shadow: none;
       transition: all 0.3s ease;
-      position: relative;
     }
 
     .download-button:hover,
     .print-button:hover {
-      background-color: #eee;
+      background-color: #555;
       transform: scale(1.05);
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
     }
 
     .note {
       font-size: 18px;
       margin-top: 30px;
+      color: black;
     }
 
     .arabic-text {
@@ -94,43 +95,20 @@
       direction: rtl;
       display: block;
       margin-top: 10px;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 1s ease, transform 1s ease;
-    }
-
-    .arabic-text.visible {
-      opacity: 1;
-      transform: translateY(0);
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+      color: black;
     }
 
     .typewriter {
       display: inline-block;
-      border-right: 2px solid #fff;
-      white-space: nowrap;
-      overflow: hidden;
-      width: 0;
-      animation: typing 4s steps(50, end) forwards, blink 0.75s step-end infinite;
-    }
-
-    @keyframes typing {
-      from { width: 0 }
-      to { width: 100% }
-    }
-
-    @keyframes blink {
-      50% { border-color: transparent }
-    }
-
-    footer {
-      flex-shrink: 0;
-      padding: 15px 20px;
-      background: rgba(255, 255, 255, 0.05);
-      color: #ccc;
-      font-size: 14px;
-      text-align: center;
-      user-select: none;
-      margin-top: auto;
+      border-right: none;
+      white-space: normal;
+      overflow: visible;
+      width: auto;
+      animation: none;
+      color: black;
     }
 
     @media print {
@@ -167,8 +145,8 @@
   <div class="glass-container" id="pdf-section">
 
     <div class="images-container">
-      <img src="https://i.postimg.cc/1t8pbbyZ/certificate-back-copy.png" alt="Certificate Back">
-      <img src="https://i.postimg.cc/d0H2HJPB/certificate-front-copy.png" alt="Certificate Front">
+      <img src="https://i.postimg.cc/1t8pbbyZ/certificate-back-copy.png" alt="Certificate Back" id="img1">
+      <img src="https://i.postimg.cc/d0H2HJPB/certificate-front-copy.png" alt="Certificate Front" id="img2">
     </div>
 
     <div>
@@ -183,41 +161,39 @@
 
   </div>
 
-  <footer>
-    © 2025 Mohamad Sajed Hamouda
-  </footer>
-
   <script>
-    const imgs = document.querySelectorAll('.images-container img');
-    const arabicText = document.getElementById('arabic');
-
-    function onScrollFadeIn() {
-      const scrollTop = window.scrollY + window.innerHeight;
-
-      imgs.forEach(img => {
-        if (scrollTop > img.offsetTop + 100) {
-          img.classList.add('visible');
-        }
-      });
-
-      if (scrollTop > arabicText.offsetTop + 100) {
-        arabicText.classList.add('visible');
-      }
-    }
-
-    document.addEventListener('scroll', onScrollFadeIn);
-    window.addEventListener('load', onScrollFadeIn);
+    // Scroll fade-ins removed to keep it simple & visible for PDF
 
     function downloadPDF() {
-      const element = document.getElementById('pdf-section');
-      const opt = {
-        margin: 0.5,
-        filename: 'certificate.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-      };
-      html2pdf().set(opt).from(element).save();
+      // Wait for both images to load before capturing
+      const img1 = document.getElementById('img1');
+      const img2 = document.getElementById('img2');
+
+      Promise.all([
+        imageLoaded(img1),
+        imageLoaded(img2)
+      ]).then(() => {
+        const element = document.getElementById('pdf-section');
+        const opt = {
+          margin: 0.5,
+          filename: 'certificate.pdf',
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(element).save();
+      });
+    }
+
+    function imageLoaded(img) {
+      return new Promise((resolve) => {
+        if (img.complete && img.naturalHeight !== 0) {
+          resolve();
+        } else {
+          img.onload = () => resolve();
+          img.onerror = () => resolve();
+        }
+      });
     }
   </script>
 
