@@ -11,13 +11,18 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
-    body {
+    html, body {
+      height: 100%;
       margin: 0;
-      padding: 40px 20px;
+      padding: 0;
       background: linear-gradient(to bottom right, #0d0d0d, #1a1a1a);
-      color: white;
       font-family: 'Poppins', sans-serif;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
       text-align: center;
+      padding: 40px 20px;
     }
 
     .glass-container {
@@ -28,6 +33,7 @@
       box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
       max-width: 1000px;
       margin: auto;
+      flex: 1 0 auto;
     }
 
     .images-container {
@@ -68,6 +74,7 @@
       cursor: pointer;
       box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
       transition: all 0.3s ease;
+      position: relative;
     }
 
     .download-button:hover,
@@ -115,8 +122,19 @@
       50% { border-color: transparent }
     }
 
+    footer {
+      flex-shrink: 0;
+      padding: 15px 20px;
+      background: rgba(255, 255, 255, 0.05);
+      color: #ccc;
+      font-size: 14px;
+      text-align: center;
+      user-select: none;
+      margin-top: auto;
+    }
+
     @media print {
-      body {
+      html, body {
         background: white;
         color: black;
       }
@@ -154,9 +172,6 @@
     </div>
 
     <div>
-      <a href="https://i.postimg.cc/d0H2HJPB/certificate-front-copy.png" download class="download-button">
-        Download Front Image
-      </a>
       <button class="print-button" onclick="window.print()">Print Certificate</button>
       <button class="download-button" onclick="downloadPDF()">Download as PDF</button>
     </div>
@@ -167,6 +182,10 @@
     </div>
 
   </div>
+
+  <footer>
+    © 2025 Mohamad Sajed Hamouda
+  </footer>
 
   <script>
     const imgs = document.querySelectorAll('.images-container img');
