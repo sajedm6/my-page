@@ -4,9 +4,8 @@
   <meta charset="UTF-8" />
   <title>Certification Page</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Cairo&family=Poppins&display=swap" rel="stylesheet">
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo&family=Poppins&display=swap" rel="stylesheet" />
 
   <style>
     html, body {
@@ -50,9 +49,16 @@
       min-width: 280px;
       height: auto;
       box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
     }
 
-    .download-button,
+    .images-container img.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     .print-button {
       display: inline-block;
       margin: 15px 10px 0;
@@ -67,7 +73,6 @@
       transition: background-color 0.3s ease;
     }
 
-    .download-button:hover,
     .print-button:hover {
       background-color: #eee;
     }
@@ -84,88 +89,85 @@
       margin-top: 10px;
     }
 
-    /* Hidden clone styles for PDF */
-    #pdf-content {
-      display: none;
-      background: white;
-      color: black;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 800px;
-      margin: auto;
-      text-align: center;
-      font-family: 'Poppins', sans-serif;
+    .typewriter {
+      display: inline-block;
+      border-right: 2px solid #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 0;
+      animation: typing 4s steps(50, end) forwards, blink 0.75s step-end infinite;
     }
 
-    #pdf-content img {
-      max-width: 45%;
-      margin: 10px;
-      vertical-align: middle;
-      border-radius: 5px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.15);
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
     }
 
-    #pdf-content .arabic-text {
-      direction: rtl;
-      margin-top: 20px;
-      font-family: 'Cairo', sans-serif;
+    @keyframes blink {
+      50% { border-color: transparent }
+    }
+
+    @media print {
+      html, body {
+        background: white;
+        color: black;
+      }
+
+      .glass-container {
+        box-shadow: none;
+        background: white;
+        padding: 0;
+      }
+
+      .print-button {
+        display: none;
+      }
+
+      .images-container img {
+        max-width: 100%;
+        box-shadow: none;
+        margin-bottom: 20px;
+      }
+
+      .note {
+        font-size: 16px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <div class="glass-container" id="page-content">
+  <div class="glass-container">
+
     <div class="images-container">
-      <img src="https://i.postimg.cc/1t8pbbyZ/certificate-back-copy.png" alt="Certificate Back" id="img1">
-      <img src="https://i.postimg.cc/d0H2HJPB/certificate-front-copy.png" alt="Certificate Front" id="img2">
+      <img src="https://i.postimg.cc/1t8pbbyZ/certificate-back-copy.png" alt="Certificate Back" />
+      <img src="https://i.postimg.cc/d0H2HJPB/certificate-front-copy.png" alt="Certificate Front" />
     </div>
 
-    <div>
-      <button class="print-button" onclick="window.print()">Print Certificate</button>
-      <button class="download-button" onclick="downloadPDF()">Download as PDF</button>
-    </div>
+    <button class="print-button" onclick="window.print()">Print Certificate</button>
 
     <div class="note">
-      <div>This certificate is issued to Mr. Mohamad Sajed Hamouda</div>
+      <div class="typewriter">This certificate is issued to Mr. Mohamad Sajed Hamouda</div>
       <span class="arabic-text">تم إصدار هذه الشهادة للسيد محمد ساجد حمودة</span>
     </div>
+
   </div>
 
-  <!-- Hidden content for PDF generation -->
-  <div id="pdf-content">
-    <img src="https://i.postimg.cc/1t8pbbyZ/certificate-back-copy.png" alt="Certificate Back">
-    <img src="https://i.postimg.cc/d0H2HJPB/certificate-front-copy.png" alt="Certificate Front">
-    <div style="margin-top: 20px; font-size: 18px; font-weight: bold;">
-      This certificate is issued to Mr. Mohamad Sajed Hamouda
-    </div>
-    <div class="arabic-text" style="font-size: 18px; font-weight: bold;">
-      تم إصدار هذه الشهادة للسيد محمد ساجد حمودة
-    </div>
-  </div>
+  <script>
+    const imgs = document.querySelectorAll('.images-container img');
 
-<script>
-  function downloadPDF() {
-    // Wait for images to load in hidden PDF container
-    const pdfImages = document.querySelectorAll('#pdf-content img');
-
-    Promise.all(Array.from(pdfImages).map(img => {
-      return new Promise(resolve => {
-        if (img.complete && img.naturalHeight !== 0) resolve();
-        else img.onload = () => resolve();
+    function onScrollFadeIn() {
+      const scrollTop = window.scrollY + window.innerHeight;
+      imgs.forEach(img => {
+        if (scrollTop > img.offsetTop + 100) {
+          img.classList.add('visible');
+        }
       });
-    })).then(() => {
-      const element = document.getElementById('pdf-content');
-      const opt = {
-        margin: 0.5,
-        filename: 'certificate.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-      };
-      html2pdf().set(opt).from(element).save();
-    });
-  }
-</script>
+    }
+
+    document.addEventListener('scroll', onScrollFadeIn);
+    window.addEventListener('load', onScrollFadeIn);
+  </script>
 
 </body>
 </html>
